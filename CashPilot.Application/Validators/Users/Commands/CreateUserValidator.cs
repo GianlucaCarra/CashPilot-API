@@ -1,4 +1,4 @@
-using CashPilot.Domain.DTOs.User;
+using CashPilot.Domain.DTOs.Users.Request;
 using FluentValidation;
 
 namespace CashPilot.Application.Validators.Users.Commands;
