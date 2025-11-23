@@ -1,3 +1,4 @@
+using CashPilot.Application.UseCases.Logins.Commands;
 using CashPilot.Application.UseCases.Users.Commands;
 using CashPilot.Domain.DTOs.Users.Request;
 using CashPilot.Domain.DTOs.Users.Response;
@@ -12,13 +13,15 @@ public class UsersController : ControllerBase
 {
     private readonly CreateUserUseCase _createUserUseCase;
     private readonly UpdateUserUseCase _updateUserUseCase;
+    private readonly ResetPasswordUseCase _resetPasswordUseCase;
 
     public UsersController(
         CreateUserUseCase createUserUseCase, 
-        UpdateUserUseCase updateUserUseCase)
+        UpdateUserUseCase updateUserUseCase, ResetPasswordUseCase resetPasswordUseCase)
     {
         _createUserUseCase =  createUserUseCase;
         _updateUserUseCase = updateUserUseCase;
+        _resetPasswordUseCase = resetPasswordUseCase;
     }
     
 
@@ -31,6 +34,17 @@ public class UsersController : ControllerBase
         var result = await _createUserUseCase.Execute(dto);
         
         return CreatedAtAction(nameof(CreateUser), new { Id = result.Id }, result);
+    }
+
+    [HttpPost("reset-password")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto dto, [FromQuery] string token)
+    {
+        await _resetPasswordUseCase.Execute(dto, token);
+        
+        return Ok();
     }
 
     [Authorize]

@@ -50,7 +50,7 @@ public class UserRepository : IUserRepository
 
     public async Task<User?> FindUserByTokenAsync(string token)
     {
-        return await _context.Users.FirstOrDefaultAsync(u => u.EmailVerifyToken == token);
+        return await _context.Users.FirstOrDefaultAsync(u => u.EmailVerifyToken == token ||  u.PasswordResetToken == token);
     }
 
     public async Task SaveAsync()

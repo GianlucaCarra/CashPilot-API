@@ -11,10 +11,15 @@ public class UserProfile : Profile
     {
         CreateMap<CreateUserDto, User>()
             .ForMember(dest => dest.PasswordHash, opt => opt.Ignore())
-            .ForMember(dest => dest.EmailVerifyToken, opt => opt.Ignore());
+            .ForMember(dest => dest.PasswordChangedAt, opt => opt.Ignore())
+            .ForMember(dest => dest.EmailVerifyToken, opt => opt.Ignore())
+            .ForMember(dest => dest.PasswordResetToken, opt => opt.Ignore());
         CreateMap<User, ResponseCreateUserDto>();
         CreateMap<UpdateUserDto, User>()
             .ForMember(dest => dest.PasswordHash, opt => opt.Ignore())
+            .ForMember(dest => dest.PasswordChangedAt, opt => opt.Ignore())
+            .ForMember(dest => dest.EmailVerifyToken, opt => opt.Ignore())
+            .ForMember(dest => dest.PasswordResetToken, opt => opt.Ignore())
             .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(src => DateTime.UtcNow))
             .ForAllMembers(opt =>
             {

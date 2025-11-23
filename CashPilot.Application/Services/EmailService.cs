@@ -15,13 +15,28 @@ public class EmailService
         _templateService = templateService;
     }
 
-    public async Task SendVerificationEmail(string name, string email, string token)
+    public async Task SendVerificationEmailAsync(string name, string email, string token)
     {
         var verificationUrl = $"{_settings.BaseUrl}/api/verification/validate?token={token}";
 
         var body = await _templateService.GetVerificationEmailAsync(name, verificationUrl);
 
         await SendToClientAsync(name, email, $"Hi {name}, activate your account to start using!", body);
+    }
+    
+    public async Task SendWelcomeEmailAsync(string name, string email)
+    {
+        var body = await _templateService.GetWelcomeEmailAsync(name);
+
+        await SendToClientAsync(name, email, $"Welcome {name}!", body);
+    }
+    
+    public async Task SendResetPasswordEmailAsync(string name, string email, string token)
+    {
+        var verificationUrl = $"{_settings.BaseUrl}/api/users/reset-password?token={token}";
+        var body = await _templateService.GetResetPasswordEmailAsync(verificationUrl);
+
+        await SendToClientAsync(name, email, $"IMPORTANT! Reset your CashFlow password.", body);
     }
     
     private async Task SendToClientAsync(string name, string email, string subject, string body)

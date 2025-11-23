@@ -27,8 +27,10 @@ public static class DependencyInjection
         // Use Cases
         services.AddScoped<CreateUserUseCase>();
         services.AddScoped<UpdateUserUseCase>();
+        services.AddScoped<ResetPasswordUseCase>();
         
         services.AddScoped<CreateLoginUseCase>();
+        services.AddScoped<ForgotPasswordUseCase>();
 
         services.AddScoped<ValidateEmailUseCase>();
         services.AddScoped<ResendValidationEmailUseCase>();

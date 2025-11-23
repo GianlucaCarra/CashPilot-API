@@ -40,7 +40,7 @@ public class TokenService : ITokenService
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
     
-    public string GenerateVerificationToken(string email)
+    public string GenerateVerificationToken(string email, int lifetimeInMinutes)
     {
         var claims = new List<Claim>
         {
@@ -56,7 +56,7 @@ public class TokenService : ITokenService
             issuer: _jwtSettings.Issuer,
             audience:  _jwtSettings.Audience,
             claims: claims,
-            expires: DateTime.UtcNow.AddMinutes(_jwtSettings.ExpirationMinutes),
+            expires: DateTime.UtcNow.AddMinutes(lifetimeInMinutes),
             signingCredentials: credentials
         );
         

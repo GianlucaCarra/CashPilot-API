@@ -8,8 +8,11 @@ public class User
     public string PasswordHash { get; set; } = string.Empty;
     public bool Activated { get; set; } = false;
     public string? EmailVerifyToken { get; set; }
+    public string? PasswordResetToken { get; set; } = null;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime? PasswordChangedAt { get; set; }
+
     
     public List<Expense> Expenses { get; set; } = new();
     public List<Income> Incomes { get; set; } = new();

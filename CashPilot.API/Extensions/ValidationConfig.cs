@@ -9,6 +9,7 @@ public static class ValidationConfig
     {
         services.AddValidatorsFromAssemblyContaining<CreateUserValidator>();
         services.AddValidatorsFromAssemblyContaining<UpdateUserValidator>();
+        services.AddValidatorsFromAssemblyContaining<ResetPasswordValidator>();
         
         return services;
     }

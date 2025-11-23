@@ -14,11 +14,17 @@ public class LoginController : ControllerBase
 {
     private readonly CreateLoginUseCase _loginUseCase;
     private readonly IConfiguration _configuration;
+    private readonly ForgotPasswordUseCase _forgotPasswordUseCase;
 
-    public LoginController(CreateLoginUseCase loginUseCase, IConfiguration configuration)
+    public LoginController(
+        CreateLoginUseCase loginUseCase,
+        IConfiguration configuration,
+        ForgotPasswordUseCase forgotPasswordUseCase
+        )
     {
         _loginUseCase = loginUseCase;
         _configuration = configuration;
+        _forgotPasswordUseCase = forgotPasswordUseCase;
     }
     
     [HttpPost]
@@ -46,9 +52,11 @@ public class LoginController : ControllerBase
     [HttpPost("forgot-password")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDto dto)
+    public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDto dto)
     {
-        throw new NotImplementedException();
+        await _forgotPasswordUseCase.Execute(dto);
+        
+        return Ok();
     }
 
     private void SetAuthCookies(string token)

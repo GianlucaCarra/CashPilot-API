@@ -18,6 +18,22 @@ public class EmailTemplateService
             { "VerificationUrl", verificationUrl }
         });
     }
+    
+    public async Task<string> GetResetPasswordEmailAsync(string verificationUrl)
+    {
+        return await LoadTemplatesAsync("ResetPasswordEmail", new Dictionary<string, string>()
+        {
+            { "VerificationUrl", verificationUrl }
+        });
+    }
+    
+    public async Task<string> GetWelcomeEmailAsync(string name)
+    {
+        return await LoadTemplatesAsync("WelcomeEmail", new Dictionary<string, string>()
+        {
+            { "Name", name }
+        });
+    }
 
     private async Task<string> LoadTemplatesAsync(string templateName, Dictionary<string, string> parameters)
     {

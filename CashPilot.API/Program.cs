@@ -10,10 +10,11 @@ builder.Services.AddSwaggerGen();
 builder.Services
     .AddApplicationDependencies()
     .AddValidation()
-    .AddDatabase(configuration, environment)
     .AddMapper()
+    .AddDatabase(configuration, environment)
     .AddAuth(configuration)
-    .AddEmail(configuration);
+    .AddEmail(configuration)
+    .AddRedisCache(configuration);
 builder.Services.AddRouting(options =>
 {
     options.LowercaseUrls = true;  
