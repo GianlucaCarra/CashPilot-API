@@ -1,44 +1,46 @@
-using System.Net;
-using System.Net.Mail;
 using CashPilot.Application.Configuration;
-using SendGrid;
-using SendGrid.Helpers.Errors.Model;
-using SendGrid.Helpers.Mail;
+using MimeKit;
+using SmtpClient = MailKit.Net.Smtp.SmtpClient;
 
 namespace CashPilot.Application.Services;
 
 public class EmailService
 {
     private readonly EmailSettings _settings;
+    private readonly EmailTemplateService _templateService;
 
-    public EmailService(EmailSettings settings, string apiKey)
+    public EmailService(EmailSettings settings, EmailTemplateService templateService)
     {
         _settings = settings;
+        _templateService = templateService;
     }
 
-    public async Task SendVerificationEmail(string email, string token)
+    public async Task SendVerificationEmail(string name, string email, string token)
     {
-        var validateString = "a";
+        var verificationUrl = $"{_settings.BaseUrl}/api/verification/validate?token={token}";
+
+        var body = await _templateService.GetVerificationEmailAsync(name, verificationUrl);
+
+        await SendToClientAsync(name, email, $"Hi {name}, activate your account to start using!", body);
     }
     
-    private async Task SendToClientAsync(string email, string subject, string body)
+    private async Task SendToClientAsync(string name, string email, string subject, string body)
     {
-        var client = new SmtpClient
+        var message = new MimeMessage();
+        message.From.Add(new MailboxAddress(_settings.FromName, _settings.FromEmail));
+        message.To.Add(new MailboxAddress(name,email));
+        message.Subject = subject;
+        message.Body = new TextPart("html")
         {
-            EnableSsl = true,
-            Credentials = new NetworkCredential(_settings.FromEmail, _settings.Password)
+            Text = body
         };
+
+        using var client = new SmtpClient();
+        await client.ConnectAsync(_settings.SmtpServer, _settings.SmtpPort, true);
         
-        var message = new MailMessage
-        {
-            From = new MailAddress(_settings.FromEmail, _settings.FromName),
-            Subject = subject,
-            Body = body,
-            IsBodyHtml = true
-        };
-        
-        message.To.Add(new MailAddress(email));
-        
-        await client.SendMailAsync(message);
+        await client.AuthenticateAsync(_settings.FromEmail, _settings.Password);
+
+        await client.SendAsync(message);
+        await client.DisconnectAsync(true);
     }
 }

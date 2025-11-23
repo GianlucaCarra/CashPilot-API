@@ -1,6 +1,9 @@
 namespace CashPilot.Domain.Exceptions;
 
-public class BadRequestException
+public class BadRequestException : DomainException
 {
-    
+    public BadRequestException(string message) : base(message, 400)
+    {
+        
+    }
 }

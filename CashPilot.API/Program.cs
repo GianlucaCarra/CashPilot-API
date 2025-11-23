@@ -11,7 +11,9 @@ builder.Services
     .AddApplicationDependencies()
     .AddValidation()
     .AddDatabase(configuration, environment)
-    .AddMapper();
+    .AddMapper()
+    .AddAuth(configuration)
+    .AddEmail(configuration);
 builder.Services.AddRouting(options =>
 {
     options.LowercaseUrls = true;  
@@ -26,7 +28,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.MapControllers();
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapControllers();
 
 app.Run();

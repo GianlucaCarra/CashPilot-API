@@ -59,7 +59,7 @@ public class UserService
         var user = _mapper.Map<CreateUserDto, User>(dto);
         
         user.PasswordHash = PasswordHelper.GetPasswordHash(dto.Password);
-        user.EmailVerifyToken = await _verificationService.CreateVerificationTokenAsync(user.Email);
+        user.EmailVerifyToken = await _verificationService.CreateVerificationTokenAsync(user.Name, user.Email);
         
         await _userRepository.AddAsync(user);
         await _userRepository.SaveAsync();

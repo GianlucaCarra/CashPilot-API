@@ -7,7 +7,7 @@ public class ValidateEmailUseCase
 {
     private readonly VerificationService _verificationService;
 
-    ValidateEmailUseCase(VerificationService verificationService)
+    public ValidateEmailUseCase(VerificationService verificationService)
     {
         _verificationService = verificationService;
     }

@@ -1,4 +1,4 @@
-namespace CashPilot.Domain.DTOs.User;
+namespace CashPilot.Domain.DTOs.Users.Request;
 
 public class CreateUserDto
 {

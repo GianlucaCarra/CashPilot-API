@@ -1,6 +1,70 @@
+using CashPilot.Application.UseCases.Logins.Commands;
+using CashPilot.Domain.DTOs.Logins.Request;
+using CashPilot.Domain.DTOs.Logins.Response;
+using CashPilot.Domain.DTOs.Users.Request;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity.Data;
+using Microsoft.AspNetCore.Mvc;
+
 namespace CashPilot.Controllers;
 
-public class LoginController
+[ApiController]
+[Route("api/[controller]")]
+public class LoginController : ControllerBase
 {
+    private readonly CreateLoginUseCase _loginUseCase;
+    private readonly IConfiguration _configuration;
+
+    public LoginController(CreateLoginUseCase loginUseCase, IConfiguration configuration)
+    {
+        _loginUseCase = loginUseCase;
+        _configuration = configuration;
+    }
     
+    [HttpPost]
+    [ProducesResponseType<ResponseCreateLoginDto>(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> Login([FromBody] CreateLoginDto dto)
+    {
+        var response = await _loginUseCase.Execute(dto.Email, dto.Password);
+        
+        SetAuthCookies(response.Token);
+        
+        return Ok(response);
+    }
+    
+    [Authorize]
+    [HttpPost("logout")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public IActionResult Logout()
+    {
+        Response.Cookies.Delete("AuthToken");
+        
+        return Ok();
+    }
+
+    [HttpPost("forgot-password")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDto dto)
+    {
+        throw new NotImplementedException();
+    }
+
+    private void SetAuthCookies(string token)
+    {
+        var expirationMinutes = int.Parse(
+            _configuration["JwtSettings:ExpirationMinutes"] ?? "60"
+        );
+
+        var cookieOptions = new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = true,
+            Expires = DateTime.UtcNow.AddMinutes(expirationMinutes),
+            SameSite = SameSiteMode.Strict
+        };
+        
+        Response.Cookies.Append("AuthToken", token, cookieOptions);
+    }
 }

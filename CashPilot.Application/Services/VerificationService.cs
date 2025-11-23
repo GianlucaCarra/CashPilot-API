@@ -2,6 +2,7 @@ using AutoMapper;
 using CashPilot.Application.Helpers;
 using CashPilot.Application.Interfaces.Repositories;
 using CashPilot.Application.Interfaces.Services;
+using CashPilot.Domain.DTOs.Verifications.Request;
 using CashPilot.Domain.Exceptions;
 
 namespace CashPilot.Application.Services;
@@ -21,11 +22,32 @@ public class VerificationService
         _emailService = emailService;
     }
 
-    public async Task<string> CreateVerificationTokenAsync(string email)
+    public async Task<string> CreateVerificationTokenAsync(string name, string email)
     {
         var token = _tokenService.GenerateVerificationToken(email);
         
-        await _emailService.SendVerificationEmail(email, token);
+        await _emailService.SendVerificationEmail(name, email, token);
+        
+        return token;
+    }
+    
+    public async Task<string> ResendVerificationEmailAsync(ResendValidationEmailDto dto)
+    {
+        var email = dto.Email;
+        var token = _tokenService.GenerateVerificationToken(email);
+        
+        var entity = await _userRepository.FindUserByEmailAsync(email);
+
+        if (entity is null)
+        {
+            throw new NotFoundException("User not found");
+        }
+        
+        entity.Activated = false;
+        entity.EmailVerifyToken = token;
+        entity.UpdatedAt = DateTime.UtcNow;
+        
+        await _emailService.SendVerificationEmail(entity.Name, email, token);
         
         return token;
     }
@@ -48,6 +70,7 @@ public class VerificationService
         
         entity.Activated = true;
         entity.EmailVerifyToken = null;
+        entity.UpdatedAt = DateTime.UtcNow;
 
         await _userRepository.SaveAsync();
     }

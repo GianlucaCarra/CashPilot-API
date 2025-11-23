@@ -1,5 +1,3 @@
-using BCrypt.Net;
-
 namespace CashPilot.Application.Helpers;
 
 public class PasswordHelper
