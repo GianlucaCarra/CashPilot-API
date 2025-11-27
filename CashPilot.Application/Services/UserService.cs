@@ -2,6 +2,7 @@ using AutoMapper;
 using CashPilot.Application.Helpers;
 using CashPilot.Application.Interfaces.Repositories;
 using CashPilot.Application.Interfaces.Services;
+using CashPilot.Application.Services.Caching;
 using CashPilot.Domain.DTOs.Users.Request;
 using CashPilot.Domain.DTOs.Users.Response;
 using CashPilot.Domain.Entities;
@@ -16,20 +17,21 @@ public class UserService
     private readonly IMapper _mapper;
     private readonly VerificationService _verificationService;
     private readonly ITokenService _tokenService;
+    private readonly ResetPasswordAttemptService _resetPasswordAttemptService;
 
     public UserService(
         IUserRepository userRepository, 
         EmailHelper emailHelper, 
         IMapper mapper, 
         VerificationService verificationService, 
-        ITokenService tokenService
-        )
+        ITokenService tokenService, ResetPasswordAttemptService resetPasswordAttemptService)
     {
         _userRepository = userRepository;
         _emailHelper = emailHelper;
         _mapper = mapper;
         _verificationService = verificationService;
         _tokenService = tokenService;
+        _resetPasswordAttemptService = resetPasswordAttemptService;
     }
 
     public async Task PatchUserByIdAsync(UpdateUserDto dto, string id)
@@ -68,12 +70,20 @@ public class UserService
             throw new BadRequestException("Verification token not valid");
         }
         
+        
         var entity = await _userRepository.FindUserByTokenAsync(token);
 
         if (entity is null)
         {
             await Task.Delay(500);
             throw new NotFoundException("User not found");
+        }
+
+        var count = await _resetPasswordAttemptService.IncrementAttemptAsync(entity.Email);
+
+        if (count > 3)
+        {
+            throw new BadRequestException("Reset password attempt count exceeded");
         }
 
         if (dto.Password != dto.ConfirmPassword)
@@ -108,6 +118,4 @@ public class UserService
         
         return _mapper.Map<User, ResponseCreateUserDto>(user);
     }
-    
-    
 }

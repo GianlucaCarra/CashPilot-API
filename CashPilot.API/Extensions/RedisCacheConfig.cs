@@ -12,6 +12,7 @@ public static class RedisCacheConfig
         });
 
         services.AddScoped<LoginAttemptService>();
+        services.AddScoped<ResetPasswordAttemptService>();
         
         return services;
     }

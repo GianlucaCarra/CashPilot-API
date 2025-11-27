@@ -17,7 +17,7 @@ public class EmailService
 
     public async Task SendVerificationEmailAsync(string name, string email, string token)
     {
-        var verificationUrl = $"{_settings.BaseUrl}/api/verification/validate?token={token}";
+        var verificationUrl = $"cashpilot.giancarra.com/verify-email?token={token}";
 
         var body = await _templateService.GetVerificationEmailAsync(name, verificationUrl);
 
@@ -33,7 +33,7 @@ public class EmailService
     
     public async Task SendResetPasswordEmailAsync(string name, string email, string token)
     {
-        var verificationUrl = $"{_settings.BaseUrl}/api/users/reset-password?token={token}";
+        var verificationUrl = $"cashpilot.giancarra.com/reset-password?token={token}";
         var body = await _templateService.GetResetPasswordEmailAsync(verificationUrl);
 
         await SendToClientAsync(name, email, $"IMPORTANT! Reset your CashFlow password.", body);

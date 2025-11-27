@@ -11,10 +11,11 @@ public static class AuthConfig
 {
     public static IServiceCollection AddAuth(this IServiceCollection services, ConfigurationManager configuration)
     {
+        services.Configure<OAuthSettings>(configuration.GetSection("OAuth"));
         services.Configure<JwtSettings>(configuration.GetSection("JwtSettings") );
-        
-        var settings = configuration.GetSection("JwtSettings").Get<JwtSettings>();
 
+        var settings = configuration.GetSection("JwtSettings").Get<JwtSettings>();
+        
         if (settings is null)
         {
             throw new Exception("Configuration section Not Found.");
@@ -23,42 +24,49 @@ public static class AuthConfig
         services.AddScoped<ITokenService, TokenService>();
 
         services.AddAuthentication(options =>
-        {
-            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        })
-        .AddJwtBearer(options =>
-        {
-            options.TokenValidationParameters = new TokenValidationParameters
             {
-                ValidateIssuer = true,
-                ValidateAudience = true,
-                ValidateLifetime = true,
-                ValidateIssuerSigningKey = true,
-                ValidIssuer = settings.Issuer,
-                ValidAudience = settings.Audience,
-                IssuerSigningKey = new SymmetricSecurityKey(
-                    Encoding.UTF8.GetBytes(settings.SecretKey)),
-                ClockSkew = TimeSpan.Zero
-            };
-
-            options.Events = new JwtBearerEvents
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = "ExternalCookie";
+            })
+            .AddJwtBearer(options =>
             {
-                OnMessageReceived = context =>
+                options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    var token = context.Request.Headers.Authorization
-                        .FirstOrDefault()?.Split(" ").Last();
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = settings.Issuer,
+                    ValidAudience = settings.Audience,
+                    IssuerSigningKey = new SymmetricSecurityKey(
+                        Encoding.UTF8.GetBytes(settings.SecretKey)),
+                    ClockSkew = TimeSpan.Zero
+                };
 
-                    if (string.IsNullOrEmpty(token))
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
                     {
-                        token = context.Request.Cookies["AuthToken"];
-                    }
+                        var token = context.Request.Headers.Authorization
+                            .FirstOrDefault()?.Split(" ").Last();
 
-                    context.Token = token;
-                    return Task.CompletedTask;
-                }
-            };
-        });
+                        if (string.IsNullOrEmpty(token))
+                        {
+                            token = context.Request.Cookies["AuthToken"];
+                        }
+
+                        context.Token = token;
+                        return Task.CompletedTask;
+                    }
+                };
+            })
+            .AddCookie("ExternalCookie", options =>
+            {
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                options.Cookie.SameSite = SameSiteMode.Lax;
+            })
+            .AddOAuthClients(configuration);
 
         services.AddAuthorization();
         
