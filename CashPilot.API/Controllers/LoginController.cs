@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using CashPilot.Application.UseCases.Logins.Commands;
 using CashPilot.Domain.DTOs.Logins.Request;
 using CashPilot.Domain.DTOs.Logins.Response;
@@ -39,27 +40,6 @@ public class LoginController : ControllerBase
         SetAuthCookies(response.Token);
         
         return Ok(response);
-    }
-    
-    [HttpGet("login/google")]
-    [ProducesResponseType(StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> LoginGoogle()
-    {
-        // var authResult = await HttpContext.AuthenticateAsync("ExternalCookie");
-        //
-        // if (!authResult.Succeeded)
-        // {
-        //     throw new BadRequestException("External authentication error");
-        // }
-        
-        // var claims = authResult.Principal.Claims.ToList();
-        //
-        // var email = claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-        // var name = claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
-        
-        return Created("", null);
     }
     
     [Authorize]

@@ -1,4 +1,5 @@
 using AutoMapper;
+using CashPilot.Domain.DTOs.OAuth.Request;
 using CashPilot.Domain.DTOs.Users.Request;
 using CashPilot.Domain.DTOs.Users.Response;
 using CashPilot.Domain.Entities;
@@ -25,5 +26,13 @@ public class UserProfile : Profile
             {
                 opt.Condition((src, dest, srcMember) => srcMember != null);
             });
+        CreateMap<GoogleProfileDto, User>()
+            .ForMember(dest => dest.PasswordHash, opt => opt.Ignore())
+            .ForMember(dest => dest.PasswordChangedAt, opt => opt.Ignore())
+            .ForMember(dest => dest.EmailVerifyToken, opt => opt.Ignore())
+            .ForMember(dest => dest.PasswordResetToken, opt => opt.Ignore())
+            .ForMember(dest => dest.Activated, opt => opt.MapFrom(src => src.EmailVerified));
+        CreateMap<GoogleProfileDto, CreateUserDto>()
+            .ForMember(dest => dest.Password, opt => opt.Ignore());
     }
 }

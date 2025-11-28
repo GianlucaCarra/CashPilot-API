@@ -17,10 +17,13 @@ public class EmailHelper
     {
         var userExists = await _userRepository.ExistsAsync(email);
 
+        
         if (userExists)
         {
             throw new ConflictException("User with that email already exists");
         }
+        
+        
     }
 
 }

@@ -3,6 +3,7 @@ using CashPilot.Application.Configuration;
 using CashPilot.Application.Interfaces.Services;
 using CashPilot.Application.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.IdentityModel.Tokens;
 
 namespace CashPilot.Extensions;
@@ -15,6 +16,17 @@ public static class AuthConfig
         services.Configure<JwtSettings>(configuration.GetSection("JwtSettings") );
 
         var settings = configuration.GetSection("JwtSettings").Get<JwtSettings>();
+        var clientSettings =  configuration.GetSection("OAuth").Get<OAuthSettings>();
+        
+        services.Configure<ForwardedHeadersOptions>(options =>
+        {
+            options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | 
+                                       ForwardedHeaders.XForwardedProto | 
+                                       ForwardedHeaders.XForwardedHost;
+            
+            options.KnownNetworks.Clear();
+            options.KnownProxies.Clear();
+        });
         
         if (settings is null)
         {
@@ -27,7 +39,8 @@ public static class AuthConfig
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultScheme = "ExternalCookie";
+
+                options.DefaultSignInScheme = "ExternalCookie";
             })
             .AddJwtBearer(options =>
             {
@@ -63,11 +76,24 @@ public static class AuthConfig
             })
             .AddCookie("ExternalCookie", options =>
             {
-                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                options.Cookie.Name = "CashPilot.External";
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+                options.Cookie.SecurePolicy = CookieSecurePolicy.None;
                 options.Cookie.SameSite = SameSiteMode.Lax;
             })
-            .AddOAuthClients(configuration);
-
+            // .AddOAuthClients(configuration);
+            .AddGoogle(options =>
+            {
+                options.SignInScheme = "ExternalCookie";
+                options.ClientId = clientSettings!.Google.ClientId;
+                options.ClientSecret = clientSettings.Google.ClientSecret;
+                options.CallbackPath = clientSettings.Google.CallbackPath;
+                
+                options.SaveTokens = true;
+                
+                options.Scope.Add("email");
+                options.Scope.Add("profile");
+            });
         services.AddAuthorization();
         
         return services;

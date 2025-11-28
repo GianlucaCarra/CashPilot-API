@@ -9,6 +9,12 @@ public static class AutoMapperConfig
     {
         services.AddAutoMapper(cfg => {},
             typeof(UserProfile));
+        services.AddAutoMapper(cfg => {},
+            typeof(LoginProfile));
+        services.AddAutoMapper(cfg => {},
+            typeof(ClaimsProfile));
+        services.AddAutoMapper(cfg => {},
+            typeof(IncomeProfile));
         
         return services;
     }

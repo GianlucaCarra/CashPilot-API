@@ -1,6 +1,5 @@
 using CashPilot.Application.Configuration;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.Extensions.Options;
 
 namespace CashPilot.Extensions;
 
@@ -23,8 +22,8 @@ public static class OAuthConfig
                 options.SignInScheme = "ExternalCookie";
                 options.ClientId = settings.Google.ClientId;
                 options.ClientSecret = settings.Google.ClientSecret;
-                options.CallbackPath = "/signin-google";
-
+                options.CallbackPath = settings.Google.CallbackPath;
+                
                 options.SaveTokens = true;
                 
                 options.Scope.Add("email");
