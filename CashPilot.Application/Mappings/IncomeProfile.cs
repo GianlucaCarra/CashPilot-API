@@ -3,7 +3,6 @@ using CashPilot.Domain.DTOs.Incomes.Request;
 using CashPilot.Domain.DTOs.Incomes.Response;
 using CashPilot.Domain.Entities;
 
-namespace CashPilot.Application.Mappings;
 
 public class IncomeProfile : Profile
 {

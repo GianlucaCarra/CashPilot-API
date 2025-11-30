@@ -27,14 +27,14 @@ public class IncomesController : ControllerBase
     [HttpGet]
     [ProducesResponseType<ResponseAllIncomesDto>(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    public async Task<ActionResult> GetAllIncomesAsync(string userId)
+    public async Task<ActionResult> GetAllIncomesAsync()
     {
         if (_userId is null)
         {
             return BadRequest();
         }
         
-        var result = await _getAllIncomesUseCase.Execute(userId);
+        var result = await _getAllIncomesUseCase.Execute(_userId);
         
         return Ok(result);
     }
