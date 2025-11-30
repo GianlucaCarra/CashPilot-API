@@ -12,5 +12,6 @@ public class IncomeProfile : Profile
         CreateMap<CreateIncomeDto, Income>()
             .ForMember(dest => dest.UserId, opt => opt.Ignore());
         CreateMap<Income, ResponseCreateIncomeDto>();
+        CreateMap<List<Income>, ResponseAllIncomesDto>();
     }
 }

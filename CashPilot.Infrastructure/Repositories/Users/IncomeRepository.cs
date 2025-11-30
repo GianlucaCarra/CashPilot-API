@@ -1,6 +1,7 @@
 using CashPilot.Application.Interfaces.Repositories;
 using CashPilot.Domain.Entities;
 using CashPilot.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace CashPilot.Infrastructure.Repositories.Users;
 
@@ -19,6 +20,14 @@ public class IncomeRepository :  IIncomeRepository
         var entity = await _context.Incomes.AddAsync(income);
         
         return entity.Entity;
+    }
+
+    public async Task<List<Income>> GetAllIncomesAsync(string userId)
+    {
+        return await _context.Incomes
+            .AsNoTracking()
+            .Where(e => e.UserId == Guid.Parse(userId))
+            .ToListAsync(); ;
     }
 
     public async Task SaveAsync()
