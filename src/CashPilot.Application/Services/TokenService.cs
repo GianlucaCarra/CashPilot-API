@@ -68,6 +68,11 @@ public class TokenService : ITokenService
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.UTF8.GetBytes(_jwtSettings.SecretKey);
 
+        if (!tokenHandler.CanReadToken(token))
+        {
+            return false;
+        }
+        
         var validationParams = new TokenValidationParameters
         {
             ValidateIssuer = true,
