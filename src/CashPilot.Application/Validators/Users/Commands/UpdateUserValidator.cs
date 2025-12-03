@@ -22,6 +22,5 @@ public class UpdateUserValidator : AbstractValidator<UpdateUserDto>
             .Matches("[0-9]").WithMessage("Password must have a number")
             .Matches("[^a-zA-Z0-9]").WithMessage("Password must have a special character")
             .When(x => x.NewPassword != null);
-
     }
 }

@@ -3,6 +3,10 @@
 ##
 ## Get latest from `dotnet new gitignore`
 
+# Databse
+*.db
+*.sqlite
+
 # MarkDown Files
 TODO.md
 
