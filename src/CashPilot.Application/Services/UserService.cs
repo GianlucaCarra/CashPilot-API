@@ -24,7 +24,8 @@ public class UserService
         EmailHelper emailHelper, 
         IMapper mapper, 
         VerificationService verificationService, 
-        ITokenService tokenService, ResetPasswordAttemptService resetPasswordAttemptService)
+        ITokenService tokenService, 
+        ResetPasswordAttemptService resetPasswordAttemptService)
     {
         _userRepository = userRepository;
         _emailHelper = emailHelper;
