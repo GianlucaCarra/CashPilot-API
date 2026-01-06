@@ -1,9 +1,8 @@
 using System.Security.Claims;
 using AutoMapper;
 using CashPilot.Domain.DTOs.OAuth.Request;
-using CashPilot.Domain.DTOs.Users.Request;
 
-namespace CashPilot.Application.Mappings;
+namespace CashPilot.Application.Mapping;
 
 public class ClaimsProfile : Profile
 {

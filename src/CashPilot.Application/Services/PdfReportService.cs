@@ -1,6 +1,8 @@
+using CashPilot.Application.Interfaces.Services;
+
 namespace CashPilot.Application.Services;
 
-public class PdfReportService
+public class PdfReportService : IPdfReportService
 {
     
 }

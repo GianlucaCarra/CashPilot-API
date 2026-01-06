@@ -9,22 +9,23 @@ using CashPilot.Domain.Exceptions;
 
 namespace CashPilot.Application.Services;
 
-public class OAuthService
+public class OAuthService : IOAuthService
 {
     private readonly IUserRepository _userRepository;
-    private readonly UserService _userService;
-    private readonly IMapper _mapper;
+    private readonly IUserService _userService;
     private readonly ITokenService _tokenService;
+    private readonly IMapper _mapper;
 
     public OAuthService(
         IUserRepository userRepository, 
-        IMapper mapper, 
-        UserService userService, ITokenService tokenService)
+        IUserService userService, 
+        ITokenService tokenService,
+        IMapper mapper) 
     {
         _userRepository = userRepository;
-        _mapper = mapper;
         _userService = userService;
         _tokenService = tokenService;
+        _mapper = mapper;
     }
     
     public async Task<ResponseCreateLoginDto> AddGoogleUserAsync(GoogleProfileDto dto)

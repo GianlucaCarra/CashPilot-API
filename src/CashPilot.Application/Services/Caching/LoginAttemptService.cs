@@ -1,8 +1,9 @@
+using CashPilot.Application.Interfaces.Services.Caching;
 using Microsoft.Extensions.Caching.Distributed;
 
 namespace CashPilot.Application.Services.Caching;
 
-public class LoginAttemptService
+public class LoginAttemptService : ILoginAttemptService
 {
     private readonly IDistributedCache _cache;
 

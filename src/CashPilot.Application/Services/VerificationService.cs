@@ -8,17 +8,16 @@ using FluentValidation;
 
 namespace CashPilot.Application.Services;
 
-public class VerificationService
+public class VerificationService : IVerificationService
 {
     private readonly IUserRepository _userRepository;
     private readonly ITokenService _tokenService;
-    private readonly EmailService _emailService;
+    private readonly IEmailService _emailService;
     
     public VerificationService(
         IUserRepository userRepository, 
         ITokenService tokenService, 
-        EmailService emailService
-        )
+        IEmailService emailService)
     {
         _userRepository = userRepository;
         _tokenService = tokenService;

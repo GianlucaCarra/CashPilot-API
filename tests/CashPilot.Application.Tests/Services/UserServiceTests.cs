@@ -1,41 +1,39 @@
-using AutoMapper;
-using CashPilot.Application.Helpers;
+using CashPilot.Application.Interfaces.Helpers;
 using CashPilot.Application.Interfaces.Repositories;
 using CashPilot.Application.Interfaces.Services;
+using CashPilot.Application.Interfaces.Services.Caching;
 using CashPilot.Application.Services;
-using CashPilot.Application.Services.Caching;
+using CashPilot.Application.Tests.Common;
 using CashPilot.Domain.DTOs.Users.Request;
 using Moq;
 
 namespace CashPilot.Application.Tests.Services;
 
-public class UserServiceTests
+public class UserServiceTests : TestBase
 {
-    private readonly Mock<IUserRepository> _userRepositoryMock;
-    private readonly EmailHelper _emailHelperMock;
-    private readonly Mock<IMapper> _mapperMock;
-    private readonly Mock<VerificationService> _verificationServiceMock;
-    private readonly Mock<ITokenService> _tokenServiceMock;
-    private readonly Mock<ResetPasswordAttemptService> _resetPasswordAttemptServiceMock;
     private readonly UserService _userService;
+    
+    private readonly Mock<IUserRepository> _userRepositoryMock;
+    private readonly Mock<IVerificationService> _verificationServiceMock;
+    private readonly Mock<ITokenService> _tokenServiceMock;
+    private readonly Mock<IResetPasswordAttemptService> _resetPasswordAttemptServiceMock;
+    private readonly Mock<IEmailHelper> _emailHelperMock;
 
     public UserServiceTests()
     {
         _userRepositoryMock = new Mock<IUserRepository>();
-        _emailHelperMock = new EmailHelper(_userRepositoryMock.Object);
-        _mapperMock = new Mock<IMapper>();
-        _verificationServiceMock = new Mock<VerificationService>();
+        _verificationServiceMock = new Mock<IVerificationService>();
         _tokenServiceMock = new Mock<ITokenService>();
-        _resetPasswordAttemptServiceMock = new Mock<ResetPasswordAttemptService>();
-        
+        _resetPasswordAttemptServiceMock = new Mock<IResetPasswordAttemptService>();
+        _emailHelperMock = new Mock<IEmailHelper>();
+
         _userService = new UserService(
             _userRepositoryMock.Object,
-            _emailHelperMock,
-            _mapperMock.Object,
             _verificationServiceMock.Object,
             _tokenServiceMock.Object,
-            _resetPasswordAttemptServiceMock.Object
-            );
+            _resetPasswordAttemptServiceMock.Object,
+            _emailHelperMock.Object,
+            Mapper);
     }
 
     [Fact]

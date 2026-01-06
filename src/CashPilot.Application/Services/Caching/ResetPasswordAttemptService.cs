@@ -1,8 +1,9 @@
+using CashPilot.Application.Interfaces.Services.Caching;
 using Microsoft.Extensions.Caching.Distributed;
 
 namespace CashPilot.Application.Services.Caching;
 
-public class ResetPasswordAttemptService
+public class ResetPasswordAttemptService : IResetPasswordAttemptService
 {
     private readonly IDistributedCache _cache;
 

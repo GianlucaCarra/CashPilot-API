@@ -1,29 +1,34 @@
 using AutoMapper;
 using CashPilot.Application.Helpers;
 using CashPilot.Application.Interfaces.Repositories;
+using CashPilot.Application.Interfaces.Services;
+using CashPilot.Application.Interfaces.Services.Caching;
 using CashPilot.Application.Services.Caching;
 using CashPilot.Domain.DTOs.Logins.Response;
 using CashPilot.Domain.Exceptions;
 
 namespace CashPilot.Application.Services;
 
-public class LoginService
+public class LoginService : ILoginService
 {
     private readonly IUserRepository _userRepository;
+    private readonly ITokenService _tokenService;
+    private readonly IEmailService _emailService;
+    private readonly ILoginAttemptService _loginAttemptService;
     private readonly IMapper _mapper;
-    private readonly TokenService _tokenService;
-    private readonly EmailService _emailService;
-    private readonly LoginAttemptService _loginAttemptService;
 
-    public LoginService(IUserRepository userRepository, 
-        IMapper mapper,
-        TokenService tokenService, EmailService emailService, LoginAttemptService loginAttemptService)
+    public LoginService(
+        IUserRepository userRepository, 
+        ITokenService tokenService, 
+        IEmailService emailService, 
+        ILoginAttemptService loginAttemptService,
+        IMapper mapper)
     {
         _userRepository = userRepository;
-        _mapper = mapper;
         _tokenService = tokenService;
         _emailService = emailService;
         _loginAttemptService = loginAttemptService;
+        _mapper = mapper;
     }
     
     public async Task<ResponseCreateLoginDto> LogUserAsync(string email, string password)

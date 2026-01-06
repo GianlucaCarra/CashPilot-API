@@ -1,10 +1,10 @@
-using AutoMapper;
+using CashPilot.Application.Interfaces.Helpers;
 using CashPilot.Application.Interfaces.Repositories;
 using CashPilot.Domain.Exceptions;
 
 namespace CashPilot.Application.Helpers;
 
-public class EmailHelper
+public class EmailHelper : IEmailHelper
 {
     private readonly IUserRepository _userRepository;
 
@@ -16,14 +16,10 @@ public class EmailHelper
     public async Task EmailExists(string email)
     {
         var userExists = await _userRepository.ExistsAsync(email);
-
         
         if (userExists)
         {
             throw new ConflictException("User with that email already exists");
         }
-        
-        
     }
-
 }

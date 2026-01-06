@@ -1,22 +1,26 @@
 using AutoMapper;
 using CashPilot.Application.Interfaces.Repositories;
+using CashPilot.Application.Interfaces.Services;
 using CashPilot.Domain.DTOs.Incomes.Request;
 using CashPilot.Domain.DTOs.Incomes.Response;
 using CashPilot.Domain.Entities;
 
 namespace CashPilot.Application.Services;
 
-public class IncomeService
+public class IncomeService : IIncomeService
 {
     private readonly IIncomeRepository _incomeRepository;
     private readonly IUserRepository _userRepository;
     private readonly IMapper _mapper;
 
-    public IncomeService(IIncomeRepository incomeRepository, IMapper mapper, IUserRepository userRepository)
+    public IncomeService(
+        IIncomeRepository incomeRepository, 
+        IUserRepository userRepository,
+        IMapper mapper)
     {
         _incomeRepository = incomeRepository;
-        _mapper = mapper;
         _userRepository = userRepository;
+        _mapper = mapper;
     }
 
     public async Task<ResponseAllIncomesDto> GetAllIncomes(string userId)

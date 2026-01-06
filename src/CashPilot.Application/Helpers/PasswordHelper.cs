@@ -1,6 +1,6 @@
 namespace CashPilot.Application.Helpers;
 
-public class PasswordHelper
+public static class PasswordHelper
 {
     public static string GetPasswordHash(string password)
     {

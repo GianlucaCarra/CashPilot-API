@@ -1,7 +1,9 @@
 using AutoMapper;
 using CashPilot.Application.Helpers;
+using CashPilot.Application.Interfaces.Helpers;
 using CashPilot.Application.Interfaces.Repositories;
 using CashPilot.Application.Interfaces.Services;
+using CashPilot.Application.Interfaces.Services.Caching;
 using CashPilot.Application.Services.Caching;
 using CashPilot.Domain.DTOs.Users.Request;
 using CashPilot.Domain.DTOs.Users.Response;
@@ -10,29 +12,29 @@ using CashPilot.Domain.Exceptions;
 
 namespace CashPilot.Application.Services;
 
-public class UserService
+public class UserService : IUserService
 {
     private readonly IUserRepository _userRepository;
-    private readonly EmailHelper _emailHelper;
-    private readonly IMapper _mapper;
-    private readonly VerificationService _verificationService;
+    private readonly IVerificationService _verificationService;
     private readonly ITokenService _tokenService;
-    private readonly ResetPasswordAttemptService _resetPasswordAttemptService;
+    private readonly IResetPasswordAttemptService _resetPasswordAttemptService;
+    private readonly IEmailHelper _emailHelper;
+    private readonly IMapper _mapper;
 
     public UserService(
         IUserRepository userRepository, 
-        EmailHelper emailHelper, 
-        IMapper mapper, 
-        VerificationService verificationService, 
+        IVerificationService verificationService, 
         ITokenService tokenService, 
-        ResetPasswordAttemptService resetPasswordAttemptService)
+        IResetPasswordAttemptService resetPasswordAttemptService,
+        IEmailHelper emailHelper, 
+        IMapper mapper) 
     {
         _userRepository = userRepository;
-        _emailHelper = emailHelper;
-        _mapper = mapper;
         _verificationService = verificationService;
         _tokenService = tokenService;
         _resetPasswordAttemptService = resetPasswordAttemptService;
+        _emailHelper = emailHelper;
+        _mapper = mapper;
     }
 
     public async Task PatchUserByIdAsync(UpdateUserDto dto, string id)

@@ -1,6 +1,8 @@
+using CashPilot.Application.Interfaces.Services;
+
 namespace CashPilot.Application.Services;
 
-public class EmailTemplateService
+public class EmailTemplateService : IEmailTemplateService
 {
     private readonly string _templatesPath;
     

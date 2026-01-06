@@ -1,15 +1,19 @@
 using CashPilot.Application.Configuration;
+using CashPilot.Application.Interfaces.Repositories;
+using CashPilot.Application.Interfaces.Services;
 using MimeKit;
 using SmtpClient = MailKit.Net.Smtp.SmtpClient;
 
 namespace CashPilot.Application.Services;
 
-public class EmailService
+public class EmailService : IEmailService
 {
     private readonly EmailSettings _settings;
-    private readonly EmailTemplateService _templateService;
+    private readonly IEmailTemplateService _templateService;
 
-    public EmailService(EmailSettings settings, EmailTemplateService templateService)
+    public EmailService(
+        EmailSettings settings, 
+        IEmailTemplateService templateService)
     {
         _settings = settings;
         _templateService = templateService;

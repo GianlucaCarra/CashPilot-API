@@ -1,5 +1,5 @@
 using AutoMapper;
-using CashPilot.Application.Mappings;
+using CashPilot.Application.Mapping;
 
 namespace CashPilot.Extensions;
 
