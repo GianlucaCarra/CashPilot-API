@@ -5,8 +5,6 @@ using CashPilot.Application.Interfaces.Services;
 using CashPilot.Application.Services;
 using CashPilot.Application.Services.Caching;
 using CashPilot.Domain.DTOs.Users.Request;
-using CashPilot.Domain.DTOs.Users.Response;
-using CashPilot.Domain.Entities;
 using Moq;
 
 namespace CashPilot.Application.Tests.Services;
@@ -14,7 +12,7 @@ namespace CashPilot.Application.Tests.Services;
 public class UserServiceTests
 {
     private readonly Mock<IUserRepository> _userRepositoryMock;
-    private readonly Mock<EmailHelper> _emailHelperMock;
+    private readonly EmailHelper _emailHelperMock;
     private readonly Mock<IMapper> _mapperMock;
     private readonly Mock<VerificationService> _verificationServiceMock;
     private readonly Mock<ITokenService> _tokenServiceMock;
@@ -24,7 +22,7 @@ public class UserServiceTests
     public UserServiceTests()
     {
         _userRepositoryMock = new Mock<IUserRepository>();
-        _emailHelperMock = new Mock<EmailHelper>();
+        _emailHelperMock = new EmailHelper(_userRepositoryMock.Object);
         _mapperMock = new Mock<IMapper>();
         _verificationServiceMock = new Mock<VerificationService>();
         _tokenServiceMock = new Mock<ITokenService>();
@@ -32,7 +30,7 @@ public class UserServiceTests
         
         _userService = new UserService(
             _userRepositoryMock.Object,
-            _emailHelperMock.Object,
+            _emailHelperMock,
             _mapperMock.Object,
             _verificationServiceMock.Object,
             _tokenServiceMock.Object,

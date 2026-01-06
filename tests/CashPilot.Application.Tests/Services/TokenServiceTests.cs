@@ -27,6 +27,8 @@ public class TokenServiceTests
         _userStub = new User
         {
             Id = Guid.NewGuid(), 
+            Name = "Test User",
+            PasswordHash = "passwordHashMock",
             Email = "test@email.com"
         };
     }
