@@ -22,16 +22,9 @@ public class UserRepository : IUserRepository
         return entity.Entity;
     }
 
-    public async Task<User> FindUserByIdAsync(string id)
+    public async Task<User?> FindUserByIdAsync(string id)
     {
-        var entity = await _context.Users.FindAsync(Guid.Parse(id));
-
-        if (entity is null)
-        {
-            throw new NotFoundException("User not found");
-        }
-        
-        return entity;
+        return await _context.Users.FindAsync(Guid.Parse(id));
     }
     
     public async Task<User?> FindUserByEmailAsync(string email)

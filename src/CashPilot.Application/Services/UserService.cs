@@ -46,6 +46,11 @@ public class UserService : IUserService
 
         var entity = await _userRepository.FindUserByIdAsync(id);
 
+        if (entity is null)
+        {
+            throw new NotFoundException("User not found");
+        }
+
         if (dto.Password is not null && dto.NewPassword is not null)
         {
             var passwordIsValid = PasswordHelper.ComparePassword(entity.PasswordHash, dto.Password);
@@ -72,7 +77,6 @@ public class UserService : IUserService
         {
             throw new BadRequestException("Verification token not valid");
         }
-        
         
         var entity = await _userRepository.FindUserByTokenAsync(token);
 
