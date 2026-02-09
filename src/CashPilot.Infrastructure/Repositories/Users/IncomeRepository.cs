@@ -24,9 +24,10 @@ public class IncomeRepository :  IIncomeRepository
 
     public async Task<List<Income>> GetAllIncomesAsync(string userId)
     {
+        var stringUserId = Guid.Parse(userId);
         return await _context.Incomes
             .AsNoTracking()
-            .Where(e => e.UserId == Guid.Parse(userId))
+            .Where(e => e.UserId == stringUserId)
             .ToListAsync(); ;
     }
 

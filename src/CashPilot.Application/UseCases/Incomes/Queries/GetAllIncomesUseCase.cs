@@ -1,3 +1,4 @@
+using CashPilot.Application.Interfaces.Services;
 using CashPilot.Application.Services;
 using CashPilot.Domain.DTOs.Incomes.Response;
 
@@ -5,9 +6,9 @@ namespace CashPilot.Application.UseCases.Incomes.Queries;
 
 public class GetAllIncomesUseCase
 {
-    private readonly IncomeService _incomeService;
+    private readonly IIncomeService _incomeService;
 
-    public GetAllIncomesUseCase(IncomeService incomeService)
+    public GetAllIncomesUseCase(IIncomeService incomeService)
     {
         _incomeService = incomeService;
     }

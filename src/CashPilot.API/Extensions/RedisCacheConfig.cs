@@ -1,3 +1,4 @@
+using CashPilot.Application.Interfaces.Services.Caching;
 using CashPilot.Application.Services.Caching;
 
 namespace CashPilot.Extensions;
@@ -11,8 +12,8 @@ public static class RedisCacheConfig
             options.Configuration = configuration.GetConnectionString("Redis");
         });
 
-        services.AddScoped<LoginAttemptService>();
-        services.AddScoped<ResetPasswordAttemptService>();
+        services.AddScoped<ILoginAttemptService, LoginAttemptService>();
+        services.AddScoped<IResetPasswordAttemptService, ResetPasswordAttemptService>();
         
         return services;
     }

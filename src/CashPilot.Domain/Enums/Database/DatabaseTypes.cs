@@ -1,6 +1,7 @@
 namespace CashPilot.Domain.Enums.Database;
 
-public class DatabaseTypes
+public enum DatabaseTypes
 {
-    
+   Postgres = 0,
+   SqLite = 1
 }

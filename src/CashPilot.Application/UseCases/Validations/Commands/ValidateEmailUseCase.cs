@@ -1,3 +1,4 @@
+using CashPilot.Application.Interfaces.Services;
 using CashPilot.Application.Services;
 using FluentValidation.Validators;
 
@@ -5,9 +6,9 @@ namespace CashPilot.Application.UseCases.Validations.Commands;
 
 public class ValidateEmailUseCase
 {
-    private readonly VerificationService _verificationService;
+    private readonly IVerificationService _verificationService;
 
-    public ValidateEmailUseCase(VerificationService verificationService)
+    public ValidateEmailUseCase(IVerificationService verificationService)
     {
         _verificationService = verificationService;
     }

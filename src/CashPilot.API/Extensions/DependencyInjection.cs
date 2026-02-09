@@ -1,5 +1,7 @@
 using CashPilot.Application.Helpers;
+using CashPilot.Application.Interfaces.Helpers;
 using CashPilot.Application.Interfaces.Repositories;
+using CashPilot.Application.Interfaces.Services;
 using CashPilot.Application.Services;
 using CashPilot.Application.UseCases.Incomes.Commands;
 using CashPilot.Application.UseCases.Incomes.Queries;
@@ -17,14 +19,14 @@ public static class DependencyInjection
     public static IServiceCollection AddApplicationDependencies(this IServiceCollection services)
     {
         // Services
-        services.AddScoped<UserService>();
-        services.AddScoped<LoginService>();
-        services.AddScoped<TokenService>();
-        services.AddScoped<VerificationService>();
-        services.AddScoped<EmailService>();
-        services.AddScoped<EmailTemplateService>();
-        services.AddScoped<IncomeService>();
-        services.AddScoped<OAuthService>();
+        services.AddScoped<IUserService, UserService>();
+        services.AddScoped<ILoginService, LoginService>();
+        services.AddScoped<ITokenService, TokenService>();
+        services.AddScoped<IVerificationService, VerificationService>();
+        services.AddScoped<IEmailService, EmailService>();
+        services.AddScoped<IEmailTemplateService, EmailTemplateService>();
+        services.AddScoped<IIncomeService, IncomeService>();
+        services.AddScoped<IOAuthService, OAuthService>();
         
         // Repositories
         services.AddScoped<IUserRepository, UserRepository>();
@@ -50,7 +52,7 @@ public static class DependencyInjection
         services.AddControllers(options => options.Filters.Add<GlobalExceptionFilter>());
         
         // Helpers
-        services.AddScoped<EmailHelper>(); 
+        services.AddScoped<IEmailHelper, EmailHelper>(); 
         
         return services;
     }

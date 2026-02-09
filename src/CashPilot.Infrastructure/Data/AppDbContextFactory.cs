@@ -1,3 +1,4 @@
+using CashPilot.Domain.Enums.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
@@ -17,13 +18,14 @@ public class AppDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
         
         var isPostgres = bool.Parse(configuration.GetSection("UsePostgres").Value ?? "false");
 
-        if (isPostgres)
+        switch (isPostgres)
         {
-            optionsBuilder.UseNpgsql(configuration.GetConnectionString("PostgresConnection"));
-        }
-        else
-        {
-            optionsBuilder.UseSqlite(configuration.GetConnectionString("SqliteConnection"));
+            case true:
+                optionsBuilder.UseNpgsql(configuration.GetConnectionString("PostgresConnection"));
+                break;
+            case false:
+                optionsBuilder.UseSqlite(configuration.GetConnectionString("SqliteConnection"));
+                break;
         }
         
         return new AppDbContext(optionsBuilder.Options);

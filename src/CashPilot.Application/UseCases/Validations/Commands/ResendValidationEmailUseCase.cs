@@ -6,9 +6,9 @@ namespace CashPilot.Application.UseCases.Validations.Commands;
 
 public class ResendValidationEmailUseCase
 {
-    private readonly VerificationService _verificationService;
+    private readonly IVerificationService _verificationService;
 
-    public ResendValidationEmailUseCase(VerificationService verificationService)
+    public ResendValidationEmailUseCase(IVerificationService verificationService)
     {
         _verificationService = verificationService;
     }

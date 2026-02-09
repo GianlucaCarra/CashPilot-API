@@ -1,3 +1,4 @@
+using CashPilot.Application.Interfaces.Services;
 using CashPilot.Application.Services;
 using CashPilot.Domain.DTOs.Users.Request;
 using FluentValidation;
@@ -6,10 +7,10 @@ namespace CashPilot.Application.UseCases.Users.Commands;
 
 public class ResetPasswordUseCase
 {
-    private readonly UserService _userService;
+    private readonly IUserService _userService;
     private readonly IValidator<ResetPasswordDto> _validator;
 
-    public ResetPasswordUseCase(UserService userService, IValidator<ResetPasswordDto> validator)
+    public ResetPasswordUseCase(IUserService userService, IValidator<ResetPasswordDto> validator)
     {
         _userService = userService;
         _validator = validator;

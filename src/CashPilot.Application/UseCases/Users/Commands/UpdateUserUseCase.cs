@@ -1,3 +1,4 @@
+using CashPilot.Application.Interfaces.Services;
 using CashPilot.Application.Services;
 using CashPilot.Domain.DTOs.Users.Request;
 using CashPilot.Domain.DTOs.Users.Response;
@@ -7,10 +8,10 @@ namespace CashPilot.Application.UseCases.Users.Commands;
 
 public class UpdateUserUseCase
 {
-    private readonly UserService _userService;
+    private readonly IUserService _userService;
     private readonly IValidator<UpdateUserDto> _validator;
     
-    public UpdateUserUseCase(UserService service,  IValidator<UpdateUserDto> validator)
+    public UpdateUserUseCase(IUserService service,  IValidator<UpdateUserDto> validator)
     {
         _userService = service;
         _validator = validator;

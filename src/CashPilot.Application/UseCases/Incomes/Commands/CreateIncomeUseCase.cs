@@ -1,4 +1,5 @@
 using CashPilot.Application.Interfaces.Repositories;
+using CashPilot.Application.Interfaces.Services;
 using CashPilot.Application.Services;
 using CashPilot.Application.Validators.Incomes.Commands;
 using CashPilot.Domain.DTOs.Incomes.Request;
@@ -9,10 +10,10 @@ namespace CashPilot.Application.UseCases.Incomes.Commands;
 
 public class CreateIncomeUseCase
 {
-    private readonly IncomeService _incomeService;
+    private readonly IIncomeService _incomeService;
     private readonly IValidator<CreateIncomeDto> _validator;
 
-    public CreateIncomeUseCase(IncomeService incomeService, IValidator<CreateIncomeDto> validator)
+    public CreateIncomeUseCase(IIncomeService incomeService, IValidator<CreateIncomeDto> validator)
     {
         _incomeService = incomeService;
         _validator = validator;

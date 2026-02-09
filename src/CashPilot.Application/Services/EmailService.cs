@@ -54,12 +54,14 @@ public class EmailService : IEmailService
             Text = body
         };
 
-        using var client = new SmtpClient();
-        await client.ConnectAsync(_settings.SmtpServer, _settings.SmtpPort, true);
+        using (var client = new SmtpClient())
+        {
+            await client.ConnectAsync(_settings.SmtpServer, _settings.SmtpPort, true);
         
-        await client.AuthenticateAsync(_settings.FromEmail, _settings.Password);
+            await client.AuthenticateAsync(_settings.FromEmail, _settings.Password);
 
-        await client.SendAsync(message);
-        await client.DisconnectAsync(true);
+            await client.SendAsync(message);
+            await client.DisconnectAsync(true);
+        }
     }
 }

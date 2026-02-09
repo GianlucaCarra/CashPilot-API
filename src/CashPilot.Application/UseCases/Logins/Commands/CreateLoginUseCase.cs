@@ -1,3 +1,4 @@
+using CashPilot.Application.Interfaces.Services;
 using CashPilot.Application.Services;
 using CashPilot.Domain.DTOs.Logins.Response;
 
@@ -5,9 +6,9 @@ namespace CashPilot.Application.UseCases.Logins.Commands;
 
 public class CreateLoginUseCase
 {
-    private readonly LoginService _loginService;
+    private readonly ILoginService _loginService;
 
-    public CreateLoginUseCase(LoginService service)
+    public CreateLoginUseCase(ILoginService service)
     {
         _loginService = service;
     }

@@ -1,4 +1,5 @@
 using CashPilot.Application.Configuration;
+using CashPilot.Application.Interfaces.Services;
 using CashPilot.Application.Services;
 using Microsoft.Extensions.Options;
 
@@ -10,7 +11,7 @@ public static class EmailConfig
     {
         services.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
         services.AddSingleton(resolver => resolver.GetRequiredService<IOptions<EmailSettings>>().Value);
-        services.AddScoped<EmailService>();
+        services.AddScoped<IEmailService, EmailService>();
         
         return services;
     }

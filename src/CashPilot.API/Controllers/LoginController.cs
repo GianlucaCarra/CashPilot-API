@@ -72,7 +72,7 @@ public class LoginController : ControllerBase
         {
             HttpOnly = true,
             Secure = true,
-            Expires = DateTime.UtcNow.AddMinutes(expirationMinutes),
+            Expires = DateTimeOffset.UtcNow.AddMinutes(expirationMinutes),
             SameSite = SameSiteMode.Strict
         };
         
