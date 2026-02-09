@@ -13,7 +13,6 @@ namespace CashPilot.Controllers;
 [Authorize]
 public class IncomesController : ControllerBase
 {
-    private readonly string? _userId;
     private readonly CreateIncomeUseCase _createIncomeUseCase;
     private readonly GetAllIncomesUseCase _getAllIncomesUseCase;
 
@@ -21,7 +20,6 @@ public class IncomesController : ControllerBase
     {
         _createIncomeUseCase = createIncomeUseCase;
         _getAllIncomesUseCase = getAllIncomesUseCase;
-        _userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
     }
 
     [HttpGet]
@@ -29,12 +27,14 @@ public class IncomesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<ActionResult> GetAllIncomesAsync()
     {
-        if (_userId is null)
+        var userId = GetUserId();
+        
+        if (userId is null)
         {
             return BadRequest();
         }
         
-        var result = await _getAllIncomesUseCase.Execute(_userId);
+        var result = await _getAllIncomesUseCase.Execute(userId);
         
         return Ok(result);
     }
@@ -44,15 +44,20 @@ public class IncomesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateIncome([FromBody] CreateIncomeDto dto)
     {
-        if (_userId is null)
+        var userId = GetUserId();
+        
+        if (userId is null)
         {
             return BadRequest();
         }
         
-        var result = await _createIncomeUseCase.Execute(dto, _userId);
+        var result = await _createIncomeUseCase.Execute(dto, userId);
         
         return CreatedAtAction(nameof(CreateIncome), new { Id = result.Id }, result);
     }
-    
-    
+
+    public string? GetUserId()
+    {
+        return User.FindFirstValue(ClaimTypes.NameIdentifier);
+    }
 }
