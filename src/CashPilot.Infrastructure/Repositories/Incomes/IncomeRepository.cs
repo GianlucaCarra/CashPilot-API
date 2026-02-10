@@ -17,17 +17,18 @@ public class IncomeRepository :  IIncomeRepository
 
     public async Task<Income> AddIncomeAsync(Income income)
     {
-        var entity = await _context.Incomes.AddAsync(income);
+        var incomeEntry = await _context.Incomes.AddAsync(income);
         
-        return entity.Entity;
+        return incomeEntry.Entity;
     }
 
     public async Task<List<Income>> GetAllIncomesAsync(string userId)
     {
-        var stringUserId = Guid.Parse(userId);
+        var userIdParsed = Guid.Parse(userId);
+        
         return await _context.Incomes
             .AsNoTracking()
-            .Where(e => e.UserId == stringUserId)
+            .Where(e => e.UserId == userIdParsed)
             .ToListAsync(); ;
     }
 

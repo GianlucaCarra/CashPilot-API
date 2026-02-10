@@ -9,4 +9,5 @@ public class AppDbContext : DbContext
 
     public DbSet<User> Users { get; set; } = null!;
     public DbSet<Income> Incomes { get; set; } = null!;
+    public DbSet<Expense> Expenses { get; set; } = null!;
 }

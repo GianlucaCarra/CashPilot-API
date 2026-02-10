@@ -17,9 +17,9 @@ public class UserRepository : IUserRepository
     
     public async Task<User> AddUserAsync(User user)
     { 
-        var entity = await _context.Users.AddAsync(user);
+        var userEntry = await _context.Users.AddAsync(user);
         
-        return entity.Entity;
+        return userEntry.Entity;
     }
 
     public async Task<User?> FindUserByIdAsync(string id)
@@ -29,9 +29,9 @@ public class UserRepository : IUserRepository
     
     public async Task<User?> FindUserByEmailAsync(string email)
     {
-        var entity = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
         
-        return entity;
+        return user;
     }
 
     public async Task<bool> ExistsAsync(string email)
