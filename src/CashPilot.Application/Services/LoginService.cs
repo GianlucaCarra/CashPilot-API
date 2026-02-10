@@ -33,9 +33,9 @@ public class LoginService : ILoginService
     
     public async Task<ResponseCreateLoginDto> LogUserAsync(string email, string password)
     {
-        var entity = await _userRepository.FindUserByEmailAsync(email);
+        var user = await _userRepository.FindUserByEmailAsync(email);
 
-        if (entity is null)
+        if (user is null)
         {
             await Task.Delay(500);
             throw new BadRequestException("Invalid Password or E-mail");
@@ -48,7 +48,7 @@ public class LoginService : ILoginService
             throw new BadRequestException("Invalid Password or E-mail");
         }
         
-        var passwordIsValid = PasswordHelper.ComparePassword(entity.PasswordHash, password);
+        var passwordIsValid = PasswordHelper.ComparePassword(user.PasswordHash, password);
 
         if (!passwordIsValid)
         {
@@ -57,14 +57,14 @@ public class LoginService : ILoginService
         
         await _loginAttemptService.ResetAttemptsAsync(email);
 
-        if (!entity.Activated)
+        if (!user.Activated)
         {
             throw new BadRequestException("User is not activated");
         }
 
-        var token = _tokenService.GenerateToken(entity.Id.ToString(), email);
+        var token = _tokenService.GenerateToken(user.Id.ToString(), email);
         
-        var response = _mapper.Map<ResponseCreateLoginDto>(entity);
+        var response = _mapper.Map<ResponseCreateLoginDto>(user);
         response.Token = token;
         
         return response;
@@ -72,17 +72,17 @@ public class LoginService : ILoginService
 
     public async Task ForgotPasswordAsync(string email)
     {
-        var entity = await _userRepository.FindUserByEmailAsync(email);
+        var user = await _userRepository.FindUserByEmailAsync(email);
 
-        if (entity is null)
+        if (user is null)
         {
             await Task.Delay(500);
             return;
         }
         
-        entity.PasswordResetToken = _tokenService.GenerateToken(entity.Id.ToString(), email);
+        user.PasswordResetToken = _tokenService.GenerateToken(user.Id.ToString(), email);
         
-        await _emailService.SendResetPasswordEmailAsync(entity.Name, email, entity.PasswordResetToken);
+        await _emailService.SendResetPasswordEmailAsync(user.Name, email, user.PasswordResetToken);
         await _userRepository.SaveAsync();
     }
 }

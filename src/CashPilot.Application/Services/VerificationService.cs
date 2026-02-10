@@ -26,11 +26,11 @@ public class VerificationService : IVerificationService
 
     public async Task<string> CreateVerificationTokenAsync(string name, string email)
     {
-        var token = _tokenService.GenerateVerificationToken(email, 60 * 24);
+        var verificationToken = _tokenService.GenerateVerificationToken(email, 60 * 24);
         
-        await _emailService.SendVerificationEmailAsync(name, email, token);
+        await _emailService.SendVerificationEmailAsync(name, email, verificationToken);
         
-        return token;
+        return verificationToken;
     }
     
     public async Task ResendVerificationEmailAsync(ResendValidationEmailDto dto)
@@ -38,27 +38,27 @@ public class VerificationService : IVerificationService
         var email = dto.Email;
         var token = _tokenService.GenerateVerificationToken(email, 60 * 24);
         
-        var entity = await _userRepository.FindUserByEmailAsync(email);
+        var user = await _userRepository.FindUserByEmailAsync(email);
 
-        if (entity is null)
+        if (user is null)
         {
             throw new NotFoundException("User not found");
         }
         
-        entity.Activated = false;
-        entity.EmailVerifyToken = token;
-        entity.UpdatedAt = DateTime.UtcNow;
+        user.Activated = false;
+        user.EmailVerifyToken = token;
+        user.UpdatedAt = DateTime.UtcNow;
         
-        await _emailService.SendVerificationEmailAsync(entity.Name, email, token);
+        await _emailService.SendVerificationEmailAsync(user.Name, email, token);
         
         await _userRepository.SaveAsync();
     }
     
     public async Task VerifyEmailAsync(string token)
     {
-        var entity = await _userRepository.FindUserByTokenAsync(token);
+        var user = await _userRepository.FindUserByTokenAsync(token);
 
-        if (entity?.EmailVerifyToken is null)
+        if (user?.EmailVerifyToken is null)
         {
             throw new BadRequestException("E-mail not verified");
         }
@@ -70,11 +70,11 @@ public class VerificationService : IVerificationService
             throw new BadRequestException("E-mail not verified");
         }
         
-        entity.Activated = true;
-        entity.EmailVerifyToken = null;
-        entity.UpdatedAt = DateTime.UtcNow;
+        user.Activated = true;
+        user.EmailVerifyToken = null;
+        user.UpdatedAt = DateTime.UtcNow;
         
         await _userRepository.SaveAsync();
-        await _emailService.SendWelcomeEmailAsync(entity.Name, entity.Email);
+        await _emailService.SendWelcomeEmailAsync(user.Name, user.Email);
     }
 }

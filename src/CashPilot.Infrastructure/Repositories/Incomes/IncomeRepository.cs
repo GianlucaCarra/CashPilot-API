@@ -14,7 +14,6 @@ public class IncomeRepository :  IIncomeRepository
         _context = context;
     }
 
-
     public async Task<Income> AddIncomeAsync(Income income)
     {
         var incomeEntry = await _context.Incomes.AddAsync(income);

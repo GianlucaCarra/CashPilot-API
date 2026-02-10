@@ -44,27 +44,27 @@ public class UserService : IUserService
             await _emailHelper.EmailExists(dto.Email);
         }
 
-        var entity = await _userRepository.FindUserByIdAsync(id);
+        var user = await _userRepository.FindUserByIdAsync(id);
 
-        if (entity is null)
+        if (user is null)
         {
             throw new NotFoundException("User not found");
         }
 
         if (dto.Password is not null && dto.NewPassword is not null)
         {
-            var passwordIsValid = PasswordHelper.ComparePassword(entity.PasswordHash, dto.Password);
+            var passwordIsValid = PasswordHelper.ComparePassword(user.PasswordHash, dto.Password);
 
             if (!passwordIsValid)
             {
                 throw new BadRequestException("Passwords do not match");
             }
             
-            entity.PasswordHash = PasswordHelper.GetPasswordHash(dto.NewPassword);
-            entity.PasswordChangedAt = DateTime.UtcNow;
+            user.PasswordHash = PasswordHelper.GetPasswordHash(dto.NewPassword);
+            user.PasswordChangedAt = DateTime.UtcNow;
         }
         
-        _mapper.Map(dto, entity);
+        _mapper.Map(dto, user);
         
         await _userRepository.SaveAsync();
     }
@@ -78,15 +78,15 @@ public class UserService : IUserService
             throw new BadRequestException("Verification token not valid");
         }
         
-        var entity = await _userRepository.FindUserByTokenAsync(token);
+        var user = await _userRepository.FindUserByTokenAsync(token);
 
-        if (entity is null)
+        if (user is null)
         {
             await Task.Delay(500);
             throw new NotFoundException("User not found");
         }
 
-        var count = await _resetPasswordAttemptService.IncrementAttemptAsync(entity.Email);
+        var count = await _resetPasswordAttemptService.IncrementAttemptAsync(user.Email);
 
         if (count > 3)
         {
@@ -98,15 +98,15 @@ public class UserService : IUserService
             throw new BadRequestException("Passwords do not match");
         }
 
-        if (PasswordHelper.ComparePassword(entity.PasswordHash, dto.Password))
+        if (PasswordHelper.ComparePassword(user.PasswordHash, dto.Password))
         {
             throw new BadRequestException("New Password cannot be the same as the old password");
         }
         
-        entity.PasswordHash = PasswordHelper.GetPasswordHash(dto.Password);
-        entity.UpdatedAt = DateTime.UtcNow;
-        entity.EmailVerifyToken = null;
-        entity.PasswordChangedAt = DateTime.UtcNow;
+        user.PasswordHash = PasswordHelper.GetPasswordHash(dto.Password);
+        user.UpdatedAt = DateTime.UtcNow;
+        user.EmailVerifyToken = null;
+        user.PasswordChangedAt = DateTime.UtcNow;
         
         await _userRepository.SaveAsync();
     }

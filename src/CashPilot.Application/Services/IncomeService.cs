@@ -32,15 +32,13 @@ public class IncomeService : IIncomeService
 
     public async Task<ResponseCreateIncomeDto> CreateIncomeAsync(CreateIncomeDto dto, string userId)
     {
-        var entity = _mapper.Map<Income>(dto);
-
-        await _userRepository.FindUserByIdAsync(userId);
+        var incomeEntity = _mapper.Map<Income>(dto);
         
-        entity.UserId = Guid.Parse(userId);
+        incomeEntity.UserId = Guid.Parse(userId);
         
-        await _incomeRepository.AddIncomeAsync(entity);
+        await _incomeRepository.AddIncomeAsync(incomeEntity);
         await _incomeRepository.SaveAsync();
 
-        return _mapper.Map<ResponseCreateIncomeDto>(entity);
+        return _mapper.Map<ResponseCreateIncomeDto>(incomeEntity);
     }
 }

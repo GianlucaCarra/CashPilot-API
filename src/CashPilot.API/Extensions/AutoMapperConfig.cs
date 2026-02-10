@@ -15,6 +15,8 @@ public static class AutoMapperConfig
             typeof(ClaimsProfile));
         services.AddAutoMapper(cfg => {},
             typeof(IncomeProfile));
+        services.AddAutoMapper(cfg => {},
+            typeof(ExpenseProfile));
         
         return services;
     }

@@ -10,6 +10,7 @@ using CashPilot.Application.UseCases.OAuth.Commands;
 using CashPilot.Application.UseCases.Users.Commands;
 using CashPilot.Application.UseCases.Validations.Commands;
 using CashPilot.Filters;
+using CashPilot.Infrastructure.Repositories.Expenses;
 using CashPilot.Infrastructure.Repositories.Incomes;
 using CashPilot.Infrastructure.Repositories.Users;
 
@@ -28,10 +29,12 @@ public static class DependencyInjection
         services.AddScoped<IEmailTemplateService, EmailTemplateService>();
         services.AddScoped<IIncomeService, IncomeService>();
         services.AddScoped<IOAuthService, OAuthService>();
+        services.AddScoped<IExpenseService, ExpenseService>();
         
         // Repositories
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IIncomeRepository, IncomeRepository>();
+        services.AddScoped<IExpenseRepository, ExpenseRepository>();
         
         // Use Cases
         services.AddScoped<CreateUserUseCase>();
