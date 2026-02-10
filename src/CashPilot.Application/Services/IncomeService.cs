@@ -23,11 +23,11 @@ public class IncomeService : IIncomeService
         _mapper = mapper;
     }
 
-    public async Task<ResponseAllIncomesDto> GetAllIncomes(string userId)
+    public async Task<List<ResponseIncomeDto>> GetAllIncomes(string userId)
     {
         var incomes = await _incomeRepository.GetAllIncomesAsync(userId);
-        
-        return _mapper.Map<ResponseAllIncomesDto>(incomes);
+
+        return _mapper.Map<List<ResponseIncomeDto>>(incomes);
     } 
 
     public async Task<ResponseCreateIncomeDto> CreateIncomeAsync(CreateIncomeDto dto, string userId)

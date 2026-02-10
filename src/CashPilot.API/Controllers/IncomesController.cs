@@ -23,18 +23,19 @@ public class IncomesController : ControllerBase
     }
 
     [HttpGet]
-    [ProducesResponseType<ResponseAllIncomesDto>(StatusCodes.Status200OK)]
+    [ProducesResponseType<List<ResponseIncomeDto>>(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<ActionResult> GetAllIncomesAsync()
     {
         var userId = GetUserId();
         
         if (userId is null)
-        {
             return BadRequest();
-        }
         
         var result = await _getAllIncomesUseCase.Execute(userId);
+        
+        if (result.Count <= 0) 
+            return NoContent();
         
         return Ok(result);
     }
@@ -56,7 +57,7 @@ public class IncomesController : ControllerBase
         return CreatedAtAction(nameof(CreateIncome), new { Id = result.Id }, result);
     }
 
-    public string? GetUserId()
+    private string? GetUserId()
     {
         return User.FindFirstValue(ClaimTypes.NameIdentifier);
     }

@@ -13,7 +13,7 @@ public class GetAllIncomesUseCase
         _incomeService = incomeService;
     }
     
-    public async Task<ResponseAllIncomesDto> Execute(string userId)
+    public async Task<List<ResponseIncomeDto>> Execute(string userId)
     {
         return await _incomeService.GetAllIncomes(userId);
     }

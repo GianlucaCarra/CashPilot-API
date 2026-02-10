@@ -10,6 +10,7 @@ using CashPilot.Application.UseCases.OAuth.Commands;
 using CashPilot.Application.UseCases.Users.Commands;
 using CashPilot.Application.UseCases.Validations.Commands;
 using CashPilot.Filters;
+using CashPilot.Infrastructure.Repositories.Incomes;
 using CashPilot.Infrastructure.Repositories.Users;
 
 namespace CashPilot.Extensions;

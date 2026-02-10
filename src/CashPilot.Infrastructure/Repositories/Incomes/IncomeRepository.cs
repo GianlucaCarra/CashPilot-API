@@ -3,7 +3,7 @@ using CashPilot.Domain.Entities;
 using CashPilot.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace CashPilot.Infrastructure.Repositories.Users;
+namespace CashPilot.Infrastructure.Repositories.Incomes;
 
 public class IncomeRepository :  IIncomeRepository
 {

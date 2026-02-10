@@ -26,6 +26,7 @@
       <Folder Include="Data\Database\" />
       <Folder Include="Migrations\DevMigrations\" />
       <Folder Include="Migrations\ProdMigrations\" />
+      <Folder Include="Repositories\Expenses\" />
     </ItemGroup>
 
     <ItemGroup>
