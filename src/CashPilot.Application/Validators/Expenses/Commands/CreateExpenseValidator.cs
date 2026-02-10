@@ -1,11 +1,12 @@
+using CashPilot.Domain.DTOs.Expenses.Request;
 using CashPilot.Domain.DTOs.Incomes.Request;
 using FluentValidation;
 
-namespace CashPilot.Application.Validators.Incomes.Commands;
+namespace CashPilot.Application.Validators.Expenses.Commands;
 
-public class CreateIncomeValidator : AbstractValidator<CreateIncomeDto>
+public class CreateExpenseValidator : AbstractValidator<CreateExpenseDto>
 {
-    public CreateIncomeValidator()
+    public CreateExpenseValidator()
     {
         RuleFor(x => x.Name)
             .NotEmpty().WithMessage("Name is required");

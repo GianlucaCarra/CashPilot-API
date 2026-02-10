@@ -14,25 +14,25 @@ namespace CashPilot.Controllers;
 public class IncomesController : ControllerBase
 {
     private readonly CreateIncomeUseCase _createIncomeUseCase;
-    private readonly GetAllIncomesUseCase _getAllIncomesUseCase;
+    private readonly GetAllExpensesUseCase _getAllExpensesUseCase;
 
-    public IncomesController(CreateIncomeUseCase createIncomeUseCase, GetAllIncomesUseCase getAllIncomesUseCase)
+    public IncomesController(CreateIncomeUseCase createIncomeUseCase, GetAllExpensesUseCase getAllExpensesUseCase)
     {
         _createIncomeUseCase = createIncomeUseCase;
-        _getAllIncomesUseCase = getAllIncomesUseCase;
+        _getAllExpensesUseCase = getAllExpensesUseCase;
     }
 
     [HttpGet]
     [ProducesResponseType<List<ResponseIncomeDto>>(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    public async Task<ActionResult> GetAllIncomesAsync()
+    public async Task<IActionResult> GetAllIncomesAsync()
     {
         var userId = GetUserId();
         
         if (userId is null)
             return BadRequest();
         
-        var result = await _getAllIncomesUseCase.Execute(userId);
+        var result = await _getAllExpensesUseCase.Execute(userId);
         
         if (result.Count <= 0) 
             return NoContent();

@@ -1,6 +1,7 @@
 using CashPilot.Domain.Enums.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 
 namespace CashPilot.Infrastructure.Data;
@@ -15,8 +16,10 @@ public class AppDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
             .AddJsonFile("appsettings.json", optional: false)
             .AddJsonFile("appsettings.Development.json", optional: true)
             .Build();
-        
         var isPostgres = bool.Parse(configuration.GetSection("UsePostgres").Value ?? "false");
+        
+        optionsBuilder.ConfigureWarnings(warnings =>
+            warnings.Ignore(RelationalEventId.NonTransactionalMigrationOperationWarning));
 
         switch (isPostgres)
         {

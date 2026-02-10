@@ -35,6 +35,7 @@ public class IncomeService : IIncomeService
         var incomeEntity = _mapper.Map<Income>(dto);
         
         incomeEntity.UserId = Guid.Parse(userId);
+        if (!string.IsNullOrEmpty(dto.Description)) incomeEntity.Description = dto.Description;
         
         await _incomeRepository.AddIncomeAsync(incomeEntity);
         await _incomeRepository.SaveAsync();

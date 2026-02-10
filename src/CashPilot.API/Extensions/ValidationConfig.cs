@@ -1,3 +1,4 @@
+using CashPilot.Application.Validators.Expenses.Commands;
 using CashPilot.Application.Validators.Incomes.Commands;
 using CashPilot.Application.Validators.Users.Commands;
 using FluentValidation;
@@ -13,6 +14,8 @@ public static class ValidationConfig
         services.AddValidatorsFromAssemblyContaining<ResetPasswordValidator>();
         
         services.AddValidatorsFromAssemblyContaining<CreateIncomeValidator>();
+        
+        services.AddValidatorsFromAssemblyContaining<CreateExpenseValidator>();
         
         return services;
     }

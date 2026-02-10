@@ -30,6 +30,7 @@ public class ExpenseService : IExpenseService
         var expenseEntity = _mapper.Map<Expense>(dto);
         
         expenseEntity.UserId = Guid.Parse(userId);
+        if (!string.IsNullOrEmpty(dto.Description)) expenseEntity.Description = dto.Description;
         
         await _expenseRepository.AddExpenseAsync(expenseEntity);
         await _expenseRepository.SaveAsync();

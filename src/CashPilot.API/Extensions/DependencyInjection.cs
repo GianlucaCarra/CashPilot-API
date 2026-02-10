@@ -3,6 +3,7 @@ using CashPilot.Application.Interfaces.Helpers;
 using CashPilot.Application.Interfaces.Repositories;
 using CashPilot.Application.Interfaces.Services;
 using CashPilot.Application.Services;
+using CashPilot.Application.UseCases.Expenses.Commands;
 using CashPilot.Application.UseCases.Incomes.Commands;
 using CashPilot.Application.UseCases.Incomes.Queries;
 using CashPilot.Application.UseCases.Logins.Commands;
@@ -50,7 +51,10 @@ public static class DependencyInjection
         services.AddScoped<LogOrCreateGoogleUserUseCase>();
         
         services.AddScoped<CreateIncomeUseCase>();
-        services.AddScoped<GetAllIncomesUseCase>();
+        services.AddScoped<GetAllExpensesUseCase>();
+        
+        services.AddScoped<CreateExpenseUseCase>();
+        services.AddScoped<GetAllExpensesUseCase>();
         
         // Filters
         services.AddControllers(options => options.Filters.Add<GlobalExceptionFilter>());

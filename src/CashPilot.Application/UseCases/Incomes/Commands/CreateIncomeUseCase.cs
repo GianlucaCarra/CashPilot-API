@@ -23,10 +23,7 @@ public class CreateIncomeUseCase
     {
         var result = await _validator.ValidateAsync(dto);
 
-        if (!result.IsValid)
-        {
-            throw new ValidationException(result.Errors);
-        }
+        if (!result.IsValid) throw new ValidationException(result.Errors);
         
         return await _incomeService.CreateIncomeAsync(dto, userId);
     }

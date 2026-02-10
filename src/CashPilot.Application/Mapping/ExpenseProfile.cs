@@ -12,7 +12,8 @@ public class ExpenseProfile : Profile
     public ExpenseProfile()
     {
         CreateMap<CreateExpenseDto, Expense>()
-            .ForMember(dest => dest.UserId, opt => opt.Ignore());
+            .ForMember(dest => dest.UserId, opt => opt.Ignore())
+            .ForMember(dest => dest.Description, opt => opt.Ignore());;
         CreateMap<Expense, ResponseCreateExpenseDto>();
         CreateMap<Expense, ResponseExpenseDto>();
     }
