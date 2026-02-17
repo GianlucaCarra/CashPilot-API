@@ -8,6 +8,7 @@ using CashPilot.Application.UseCases.Incomes.Commands;
 using CashPilot.Application.UseCases.Incomes.Queries;
 using CashPilot.Application.UseCases.Logins.Commands;
 using CashPilot.Application.UseCases.OAuth.Commands;
+using CashPilot.Application.UseCases.PdfReport.Commands;
 using CashPilot.Application.UseCases.Users.Commands;
 using CashPilot.Application.UseCases.Validations.Commands;
 using CashPilot.Filters;
@@ -31,6 +32,7 @@ public static class DependencyInjection
         services.AddScoped<IIncomeService, IncomeService>();
         services.AddScoped<IOAuthService, OAuthService>();
         services.AddScoped<IExpenseService, ExpenseService>();
+        services.AddScoped<IPdfReportService, PdfReportService>();
         
         // Repositories
         services.AddScoped<IUserRepository, UserRepository>();
@@ -55,6 +57,8 @@ public static class DependencyInjection
         
         services.AddScoped<CreateExpenseUseCase>();
         services.AddScoped<GetAllExpensesUseCase>();
+        
+        services.AddScoped<CreatePdfReportUseCase>();
         
         // Filters
         services.AddControllers(options => options.Filters.Add<GlobalExceptionFilter>());

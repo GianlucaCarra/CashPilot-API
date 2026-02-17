@@ -28,7 +28,7 @@ public class IncomeService : IIncomeService
         var incomes = await _incomeRepository.GetAllIncomesAsync(userId);
 
         return _mapper.Map<List<ResponseIncomeDto>>(incomes);
-    } 
+    }
 
     public async Task<ResponseCreateIncomeDto> CreateIncomeAsync(CreateIncomeDto dto, string userId)
     {

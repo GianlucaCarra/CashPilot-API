@@ -30,6 +30,19 @@ public class IncomeRepository :  IIncomeRepository
             .Where(e => e.UserId == userIdParsed)
             .ToListAsync(); ;
     }
+    
+    public async Task<List<Income>> GetIncomesInTimeSpan(DateOnly startDate, DateOnly endDate, string userId)
+    {
+        var userIdParsed = Guid.Parse(userId);
+        DateTime start = startDate.ToDateTime(TimeOnly.MinValue).Date;
+        DateTime end   = endDate.ToDateTime(TimeOnly.MaxValue).Date;
+        
+        return await _context.Incomes
+            .AsNoTracking()
+            .Where(e => e.UserId == userIdParsed)
+            .Where(e => e.Date >= start && e.Date < end.Date.AddDays(1))
+            .ToListAsync();
+    }
 
     public async Task SaveAsync()
     {

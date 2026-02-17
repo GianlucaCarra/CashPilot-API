@@ -33,13 +33,11 @@ public class ExpensesController : ControllerBase
     {
         var userId = GetUserId();
         
-        if (userId is null)
-            return BadRequest();
+        if (userId is null) return BadRequest();
         
         var result = await _getAllExpensesUseCase.Execute(userId);
         
-        if (result.Count <= 0) 
-            return NoContent();
+        if (result.Count <= 0) return NoContent();
         
         return Ok(result);
     }
