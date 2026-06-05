@@ -1,12 +1,12 @@
 <h1 align="center" id="title">CashPilot</h1>
 
-<p id="description">This app is a income/expenses manager, where you can generate reports for granular control of your expenses.<br><br>You can use this app if you want, but it's not a project funded and only a personal project to showcase my C# skills.</p>
+<p id="description">This app is an income/expenses manager, where you can generate reports for granular control of your expenses.<br><br>You can use this app if you want, but it's not a project funded and only a personal project to showcase my C# skills.</p>
 
 
 
 <h2>🧐 Features</h2>
 
-Here're some of the project's best features:
+Here are some of the project's best features:
 
 *   Login with JWT
 *   Account activation
@@ -68,7 +68,7 @@ Technologies used in the project:
 *   Redis
 *   OAuth 2.0
 *   SQLite
-*   PostgreSQL
+*   PostgresSQL
 *   AutoMapper
 *   FluentValidation
 *   QuestPDF
